@@ -10,11 +10,13 @@ app = Flask(__name__)
 
 @app.route('/find')
 def find():
-    arrayResult = []
+    arrayResult = {}
     results = collection.find({})
+    temp = 0
     for result in results:
         result.pop("_id")
-        arrayResult.append(result)
+        arrayResult[temp]=result
+        temp += 1
     return jsonify(arrayResult)
 
 @app.route('/create/<string:email>/<string:subject>')
@@ -32,4 +34,4 @@ def delete(email):
     return "Done"
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

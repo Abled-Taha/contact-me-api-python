@@ -8,30 +8,48 @@ collection = db['content']
 
 app = Flask(__name__)
 
-@app.route('/find')
-def find():
-    arrayResult = {}
-    results = collection.find({})
-    temp = 0
-    for result in results:
-        result.pop("_id")
-        arrayResult[temp]=result
-        temp += 1
-    return jsonify(arrayResult)
+def validateKey(key):
+    if key == '225338242':
+        return True
+    else:
+        return False
 
-@app.route('/create/<string:email>/<string:subject>')
-def create(email, subject):
-    post = {
-        'email' : email,
-        'subject' : subject
-    }
-    collection.insert_one(post)
-    return "Done"
+@app.route('/<string:key>/find')
+def find(key):
+    result = validateKey(key)
+    if result:
+        arrayResult = {}
+        results = collection.find({})
+        temp = 0
+        for result in results:
+            result.pop("_id")
+            arrayResult[temp]=result
+            temp += 1
+        return jsonify(arrayResult)
+    else:
+        return "Key Error"
 
-@app.route('/delete/<string:email>')
-def delete(email):
-    collection.delete_one({'email' : email})
-    return "Done"
+@app.route('/<string:key>/create/<string:email>/<string:subject>')
+def create(key, email, subject):
+    result = validateKey(key)
+    if result:
+        post = {
+            'email' : email,
+            'subject' : subject
+        }
+        collection.insert_one(post)
+        return "Done"
+    else:
+        return "Key Error"
+
+@app.route('/<string:key>/delete/<string:email>')
+def delete(key, email):
+    result = validateKey(key)
+    if result:
+        collection.delete_one({'email' : email})
+        return "Done"
+    else:
+        return "Key Error"
 
 if __name__ == "__main__":
     app.run(debug=False)

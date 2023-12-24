@@ -2,9 +2,9 @@ from flask import Flask, json, jsonify
 import pymongo
 from pymongo import MongoClient
 
-cluster = MongoClient("mongodb+srv://abled:MongoRoot3241@cluster0.fcmer.mongodb.net/person?retryWrites=true&w=majority")
-db = cluster['person']
-collection = db['content']
+cluster = MongoClient("mongodb://contact-me-api-python:MongoContact-me-api-python@localhost:27017/?authSource=contact-me")
+db = cluster['contact-me']
+collection = db['people']
 
 app = Flask(__name__)
 
@@ -52,4 +52,4 @@ def delete(key, email):
         return "Key Error"
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
